@@ -25,6 +25,6 @@ jobs:
 
       - name: Git Pull
         run: |
-          cd /var/www/html/backend
+          cd /var/www/html/backend-template
           git pull
           php artisan migrate
