@@ -24,7 +24,12 @@ jobs:
       - uses: actions/checkout@v2
 
       - name: Git Pull
-        run: |
-          cd /var/www/html/backend-template
-          git pull
-          php artisan migrate
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.LINODE_HOST }}
+          username: ${{ secrets.LINODE_USERNAME }}
+          key: ${{ secrets.LINODE_SSHKEY }}
+          script: |
+            cd /var/www/html/backend-template
+            git pull
+            php artisan migrate
