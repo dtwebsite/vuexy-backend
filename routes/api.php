@@ -2,6 +2,7 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers;
 
 /*
 |--------------------------------------------------------------------------
@@ -15,11 +16,11 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::group(['prefix' => 'auth'], function () {
-    Route::post('login', [AuthController::class, 'login']);
-    Route::post('register', [AuthController::class, 'register']);
+    Route::post('login', [Controllers\AuthController::class, 'login']);
+    Route::post('register', [Controllers\AuthController::class, 'register']);
 
     Route::group(['middleware' => 'auth:sanctum'], function() {
-        Route::get('logout', [AuthController::class, 'logout']);
-        Route::get('user', [AuthController::class, 'user']);
+        Route::get('logout', [Controllers\AuthController::class, 'logout']);
+        Route::get('user', [Controllers\AuthController::class, 'user']);
     });
 });
