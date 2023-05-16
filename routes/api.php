@@ -25,6 +25,6 @@ Route::group(['prefix' => 'auth'], function () {
     });
 
     Route::group(['middleware' => 'auth:api'], function() {
-        Route::resource('role', [Controllers\RoleController::class]);
+        Route::resource('role', Controllers\RoleController::class);
     });
 });
