@@ -87,7 +87,24 @@ class AuthController extends Controller
     */
     public function user(Request $request)
     {
-        return response()->json($request->user());
+        $user = $request->user();
+
+        // 使用者
+        $data['user'] = $user->toArray();
+
+        // 權限表
+        if (isAdmin($user)) {
+            $data['user']['ability'] = [
+                ['action' => 'manage', 'subject' => 'all']
+            ];
+        } else {
+            $data['user']['ability'] = collect($user->getAllPermissions())
+                ->pluck('name')
+                ->map(fn ($name) => ['action' => $name, 'subject' => 'Auth'])
+                ->push(['action' => 'read', 'subject' => 'Auth']);
+        }
+
+        return response()->json($data);
     }
 
     /**
@@ -103,5 +120,25 @@ class AuthController extends Controller
             'message' => 'Successfully logged out'
         ]);
 
+    }
+
+    public function updatePassword(Request $request)
+    {
+        $data = $request->validate([
+            'currentPassword'   => 'required',
+            'newPassword'       => 'required',
+        ]);
+
+        $user = User::find(Auth::id());
+
+        if (!Hash::check($data['currentPassword'], $user['password'])) {
+            return $this->badRequest('現在密碼輸入錯誤');
+        }
+
+        User::find(Auth::id())->update(['password' => Hash::make($data['newPassword'])]);
+
+        return response()->json([
+            'message' => '密碼更新成功'
+        ]);
     }
 }

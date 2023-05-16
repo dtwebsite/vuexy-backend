@@ -13,7 +13,10 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        //
+        // 載入全局共用函數
+        foreach (glob(app_path() . '/helpers/*.php') as $filename) {
+            require_once $filename;
+        }
     }
 
     /**
