@@ -66,7 +66,7 @@ class AuthController extends Controller
         if(!Auth::attempt($credentials))
         {
             return response()->json([
-                'message' => 'Unauthorized'
+                'message' => __('backend.loginFailed')
             ],401);
         }
 
@@ -117,7 +117,7 @@ class AuthController extends Controller
         $request->user()->tokens()->delete();
 
         return response()->json([
-            'message' => 'Successfully logged out'
+            'message' => __('backend.logoutSuccessfully')
         ]);
 
     }
@@ -132,13 +132,13 @@ class AuthController extends Controller
         $user = User::find(Auth::id());
 
         if (!Hash::check($data['currentPassword'], $user['password'])) {
-            return $this->badRequest('現在密碼輸入錯誤');
+            return $this->badRequest(__('backend.currentPasswordIncorrect'));
         }
 
         User::find(Auth::id())->update(['password' => Hash::make($data['newPassword'])]);
 
         return response()->json([
-            'message' => '密碼更新成功'
+            'message' => __('backend.updatePasswordSuccessfully')
         ]);
     }
 }

@@ -23,8 +23,8 @@ Route::group(['prefix' => 'auth'], function () {
         Route::get('logout', [Controllers\AuthController::class, 'logout']);
         Route::get('user', [Controllers\AuthController::class, 'user']);
     });
+});
 
-    Route::group(['middleware' => 'auth:api'], function() {
-        Route::resource('role', Controllers\RoleController::class);
-    });
+Route::middleware(['auth:api', LanguageMiddleware::class])->group(function () {
+    Route::resource('role', Controllers\RoleController::class);
 });
