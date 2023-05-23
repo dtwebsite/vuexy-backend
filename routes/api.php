@@ -3,6 +3,7 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers;
+use App\Http\Middleware\LanguageMiddleware;
 
 /*
 |--------------------------------------------------------------------------
@@ -22,9 +23,10 @@ Route::group(['prefix' => 'auth'], function () {
     Route::group(['middleware' => 'auth:sanctum'], function() {
         Route::get('logout', [Controllers\AuthController::class, 'logout']);
         Route::get('user', [Controllers\AuthController::class, 'user']);
+        // Route::post('reset/password', [Controllers\AuthController::class, 'updatePassword']);
     });
 });
 
 Route::middleware(['auth:api', LanguageMiddleware::class])->group(function () {
-    Route::resource('role', Controllers\RoleController::class);
+    Route::resource('roles', Controllers\RoleController::class);
 });
